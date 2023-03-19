@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.mvvmsharedata.databinding.FragmentSecondBinding
 
@@ -14,6 +15,8 @@ import com.example.mvvmsharedata.databinding.FragmentSecondBinding
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
+
+    private lateinit var viewModel: counterViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,6 +37,16 @@ class SecondFragment : Fragment() {
 
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }
+
+        viewModel = ViewModelProvider(requireActivity()).get(counterViewModel::class.java)
+
+        viewModel.getCounterMethod().observe(viewLifecycleOwner, {
+            binding.textviewSecond.text = it.toString()
+        })
+
+        binding.decrementButton.setOnClickListener {
+            viewModel.increment()
         }
     }
 
